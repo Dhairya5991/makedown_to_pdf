@@ -52,7 +52,8 @@ app.post('/api/pdf', async (req, res) => {
     res.setHeader('Content-Disposition', `attachment; filename="${(title || 'document').replace(/[^a-z0-9_-]/gi, '_')}.pdf"`);
     res.send(pdf);
   } catch (e) {
-    res.status(500).json({ error: 'pdf_generation_failed' });
+    console.error('PDF generation failed:', e);
+    res.status(500).json({ error: 'pdf_generation_failed', details: e.message });
   }
 });
 

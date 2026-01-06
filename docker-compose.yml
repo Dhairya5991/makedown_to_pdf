@@ -1,25 +1,29 @@
-version: "3.9"
 services:
   backend:
     build:
       context: ./backend
+    env_file:
+      - .env
     environment:
       - PORT=8080
       - FRONTEND_URL=http://localhost:3000
-      - SESSION_SECRET=${SESSION_SECRET:-change_me}
+      - ALLOW_DEV_LOGIN=${ALLOW_DEV_LOGIN:-true}
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID:-}
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET:-}
-      - ALLOW_DEV_LOGIN=${ALLOW_DEV_LOGIN:-true}
+      - SESSION_SECRET=${SESSION_SECRET:-change_me}
     ports:
-      - "8080:8080"
+      - "5000:8080"
     volumes:
       - ./backend/data:/app/data
+    restart: unless-stopped
+
   frontend:
     build:
       context: ./frontend
       args:
-        VITE_API_BASE_URL: http://localhost:8080/api
+        VITE_API_BASE_URL: http://localhost:5000/api
     ports:
       - "3000:80"
     depends_on:
       - backend
+    restart: unless-stopped

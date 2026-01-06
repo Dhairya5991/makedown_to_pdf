@@ -44,7 +44,10 @@ export default function EditorPage({ me }) {
       credentials: 'include',
       body: JSON.stringify({ markdown, template, theme, branding, title })
     });
-    if (!r.ok) return;
+    if (!r.ok) {
+      alert('Failed to download PDF. Please try again.');
+      return;
+    }
     const blob = await r.blob();
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');

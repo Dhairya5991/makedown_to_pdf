@@ -118,12 +118,19 @@ export function renderHtml({ markdown, template = 'resume', theme = 'classic', b
 }
 
 export async function htmlToPdfBuffer(html, options = {}) {
-  const browser = await puppeteer.launch({
-    args: ['--no-sandbox', '--disable-setuid-sandbox']
-  });
+  const launchOptions = {
+    args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
+    headless: 'new'
+  };
+  if (process.env.PUPPETEER_EXECUTABLE_PATH) {
+    launchOptions.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
+  }
+  
+  console.log('Launching Puppeteer with options:', JSON.stringify(launchOptions));
+  const browser = await puppeteer.launch(launchOptions);
   try {
     const page = await browser.newPage();
-    await page.setContent(html, { waitUntil: 'networkidle0' });
+    await page.setContent(html, { waitUntil: 'networkidle0', timeout: 30000 });
     const buffer = await page.pdf({
       format: 'A4',
       printBackground: true,
@@ -131,6 +138,9 @@ export async function htmlToPdfBuffer(html, options = {}) {
       ...options
     });
     return buffer;
+  } catch (e) {
+    console.error('Puppeteer error:', e);
+    throw e;
   } finally {
     await browser.close();
   }
