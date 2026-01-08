@@ -17,6 +17,7 @@ function useMe() {
 export default function App() {
   const me = useMe();
   const navigate = useNavigate();
+  const [uiStyle, setUiStyle] = useState(localStorage.getItem('uiStyle') || 'classic');
 
   const login = () => {
     const w = window.open(`${window.__ENV.API_BASE_URL}/auth/google`, '_blank', 'width=500,height=700');
@@ -39,13 +40,19 @@ export default function App() {
     document.documentElement.setAttribute('data-theme', next);
     localStorage.setItem('theme', next);
   };
+  const toggleUiStyle = () => {
+    const next = uiStyle === 'classic' ? 'modern' : 'classic';
+    setUiStyle(next);
+    localStorage.setItem('uiStyle', next);
+  };
 
   return (
-    <div className="app">
+    <div className={`app ${uiStyle}`}>
       <header className="header">
         <div className="brand">
           <span>📝 Markdown to PDF</span>
           <span className="btn" onClick={toggleTheme}>Dark mode</span>
+          <span className="btn" onClick={toggleUiStyle}>{uiStyle === 'modern' ? 'Classic UI' : 'Modern UI'}</span>
         </div>
         <nav className="nav">
           <Link className="btn" to="/">Editor</Link>

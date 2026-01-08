@@ -5,12 +5,22 @@ html, body, #root { height: 100%; }
   flex-direction: column;
   min-height: 100%;
 }
+.app.modern {
+  background: radial-gradient(1000px 600px at 10% 10%, rgba(37,99,235,0.12), transparent), radial-gradient(800px 500px at 90% 10%, rgba(16,185,129,0.12), transparent);
+}
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 12px 16px;
   border-bottom: 1px solid var(--border);
+}
+.modern .header {
+  backdrop-filter: blur(8px);
+  background: rgba(255,255,255,0.4);
+  border: 1px solid rgba(229,231,235,0.6);
+  border-radius: 12px;
+  margin: 8px;
 }
 .brand {
   display: flex;
@@ -31,10 +41,19 @@ html, body, #root { height: 100%; }
   border-radius: 8px;
   cursor: pointer;
 }
+.modern .btn {
+  border: none;
+  background: linear-gradient(135deg, rgba(37,99,235,0.12), rgba(16,185,129,0.12));
+  color: var(--text);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+}
 .btn.primary {
   border-color: var(--accent);
   background: var(--accent);
   color: white;
+}
+.modern .btn.primary {
+  background: linear-gradient(135deg, #2563eb, #22c55e);
 }
 .container {
   padding: 12px;
@@ -52,13 +71,26 @@ html, body, #root { height: 100%; }
   border-radius: 12px;
   overflow: hidden;
 }
+.modern .card {
+  border: none;
+  background: rgba(255,255,255,0.6);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+}
 .card .title {
   padding: 10px 12px;
   border-bottom: 1px solid var(--border);
   font-weight: 600;
 }
+.modern .card .title {
+  border: none;
+  padding: 14px 16px;
+  font-size: 16px;
+}
 .card .body {
   padding: 8px;
+}
+.modern .card .body {
+  padding: 12px;
 }
 .editor {
   width: 100%;
@@ -83,12 +115,21 @@ html, body, #root { height: 100%; }
   padding: 8px;
   border-bottom: 1px solid var(--border);
 }
+.modern .toolbar {
+  border: none;
+  padding: 12px;
+}
 .input {
   padding: 8px;
   border: 1px solid var(--border);
   border-radius: 8px;
   background: transparent;
   color: var(--text);
+}
+.modern .input {
+  border: none;
+  background: rgba(255,255,255,0.8);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.06);
 }
 .list {
   display: grid;
@@ -102,4 +143,9 @@ html, body, #root { height: 100%; }
   display: flex;
   flex-direction: column;
   gap: 6px;
+}
+.modern .item {
+  border: none;
+  background: rgba(255,255,255,0.6);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.06);
 }
