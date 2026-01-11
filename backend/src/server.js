@@ -14,7 +14,9 @@ app.use(cors({
   origin: FRONTEND_URL,
   credentials: true
 }));
+
 app.use(bodyParser.json({ limit: '2mb' }));
+
 app.use(session({
   secret: SESSION_SECRET,
   resave: false,
@@ -25,11 +27,26 @@ app.use(session({
     sameSite: 'lax'
   }
 }));
+
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.get('/api/health', (req, res) => {
   res.json({ ok: true });
+});
+
+app.get('/api', (req, res) => {
+  res.json({ 
+    message: 'Markdown to PDF API',
+    endpoints: {
+      health: '/api/health',
+      me: '/api/me',
+      auth: '/api/auth/:provider*',
+      pdf: '/api/pdf (POST)',
+      preview: '/api/preview (POST)',
+      history: '/api/history (GET/POST/DELETE)'
+    }
+  });
 });
 
 app.use('/api/auth', authRouter);
@@ -91,6 +108,6 @@ app.delete('/api/history/:id', requireAuth, (req, res) => {
   res.json({ ok: true });
 });
 
-app.listen(PORT, () => {
-  console.log(`Backend listening on port ${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Backend running on port ${PORT}`);
 });
