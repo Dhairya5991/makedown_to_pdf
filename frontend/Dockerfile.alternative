@@ -1,10 +1,15 @@
 FROM node:20-alpine as build
 WORKDIR /app
 COPY package.json package-lock.json* yarn.lock* pnpm-lock.yaml* ./
-RUN npm config set fetch-retry-mintimeout 20000 && \
+
+# Configure npm for better network resilience
+RUN npm config set registry https://registry.npmmirror.com && \
+    npm config set fetch-retry-mintimeout 20000 && \
     npm config set fetch-retry-maxtimeout 120000 && \
     npm config set fetch-timeout 300000 && \
-    npm install --verbose
+    npm install --verbose || \
+    (npm config set registry https://registry.npmjs.org && npm install --verbose)
+
 COPY . .
 ARG VITE_API_BASE_URL
 ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}

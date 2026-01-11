@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  frontend:
+    build:
+      network: host
+      context: ./frontend
+      args:
+        - BUILDKIT_INLINE_CACHE=1
+    
+  backend:
+    build:
+      network: host
+      context: ./backend
+      args:
+        - BUILDKIT_INLINE_CACHE=1

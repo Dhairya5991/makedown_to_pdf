@@ -6,14 +6,16 @@ WORKDIR /app
 # Copy package files
 COPY package.json package-lock.json* yarn.lock* pnpm-lock.yaml* ./
 
-# Install dependencies (skipping chromium download as it's in the base image)
+# Configure npm for better network resilience and skip chromium download
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable
 
-RUN npm config set fetch-retry-mintimeout 20000 && \
+RUN npm config set registry https://registry.npmmirror.com && \
+    npm config set fetch-retry-mintimeout 20000 && \
     npm config set fetch-retry-maxtimeout 120000 && \
     npm config set fetch-timeout 300000 && \
-    npm install --verbose
+    npm install --verbose || \
+    (npm config set registry https://registry.npmjs.org && npm install --verbose)
 
 # Copy source
 COPY src ./src
